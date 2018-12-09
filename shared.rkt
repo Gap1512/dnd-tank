@@ -2,22 +2,27 @@
 (require 2htdp/universe 2htdp/image)
 
 #|
-Client Package: id-player(integer), pos-x-player(integer), shoot-status(boolean), shoot-pos(posn)
+Client Functions: on-mouse, to-draw, on-key
 
-Server Bundle: pos-x-player-1(integer), skin-player-1(integer),
+Client Messages: type(string) id(string(iworld-name)), pos-x-player(integer), mouse-click(posn)
+                 or
+                 type(string) id(string(iworld-name)), pos-x-player(integer), pressed-key(string)
+
+Server Bundle: time(integer),
+               pos-x-player-1(integer), skin-player-1(integer),
 	       pos-x-player-2(integer), skin-player-2(integer),
 	       shoot-status-player-1(boolean), shoot-pos-player-1(integer), 
                shoot-status-player-2(boolean), shoot-pos-player-2(integer), 
 	       game-running(boolean), winner-id(integer)
 
-Local Processing: player-move, render-all, time-progression, bullet-calculation
-Server Processing: hit-player, game-over
+Local Processing: render
+Server Processing: hit-player, game-over, player-move, render-all, time-progression, bullet-calculation
 
 A Client->Server Package will be sent when:
-I : A movement processing occur
-II: A bullet calculation occur
+I : A mouse event occur
+II: A key is pressed
 A Server->Client Bundle will be sent when:
-I : On Tick
+I : Processing Ends
 
 Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height, Sprites Properties, Proportion)
 |#
@@ -30,7 +35,8 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (define WIDTH (* 6 BASE-RESOLUTION))
 (define HEIGHT (* 3 BASE-RESOLUTION))
 (define PLAYER-HEIGHT 1.75)
-(provide GRAVITY PROPORTION BASE-RESOLUTION RESOLUTION WIDTH HEIGHT)
+(define SHOOT-HEIGHT (- RESOLUTION 15))
+(provide GRAVITY PROPORTION BASE-RESOLUTION RESOLUTION WIDTH HEIGHT SHOOT-HEIGHT)
 
 ;Auxiliar functions to convert between pixels and meters
 (define (pixels->meters pixels)
@@ -40,20 +46,25 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (provide pixels->meters meters->pixels)
 
 ;Sprites
-(define BACKGROUND     (scale PROPORTION (bitmap "graphics/Background/Background.png")))
-(define LOADING-SCREEN (scale PROPORTION (bitmap "graphics/Background/Loading_Screen.png")))
-(provide BACKGROUND LOADING-SCREEN)
+(define BACKGROUND       (scale PROPORTION (bitmap "graphics/Background/Background.png")))
+(define EMPTY-BACKGROUND (scale PROPORTION (bitmap "graphics/Background/Empty_Background.png")))
+(define LOADING-SCREEN   (scale PROPORTION (bitmap "graphics/Background/Loading_Screen.png")))
+(provide BACKGROUND EMPTY-BACKGROUND LOADING-SCREEN)
 
-;Skin and Shoot structures
+;Skin, Shoot, Player and Posn structures
 (struct skin [stancing walking empty-stancing empty-walking shoot] #:transparent)
-(struct shoot [frame-1 frame-2] #:transparent)
-(provide (struct-out skin) (struct-out shoot))
+(struct shoot-aux [frame-1 frame-2] #:transparent)
+(struct posn [x y] #:transparent)
+(struct player [id skin pos-x])
+(struct shoot [id posn status])
+(struct ws [time players shoots game-running winner-id])
+(provide (struct-out player) (struct-out ws) (struct-out shoot) (struct-out skin) (struct-out shoot-aux) (struct-out posn))
 
 ;Skins definitions
-(define ARROW    (shoot
+(define ARROW    (shoot-aux
                        (scale PROPORTION (bitmap "graphics/Shoots/Arrow_01.png"))
                        (scale PROPORTION (bitmap "graphics/Shoots/Arrow_02.png"))))
-(define FIREBALL (shoot
+(define FIREBALL (shoot-aux
                        (scale PROPORTION (bitmap "graphics/Shoots/Fire_01.png"))
                        (scale PROPORTION (bitmap "graphics/Shoots/Fire_02.png"))))
 (define RANGER-1 (skin
