@@ -36,7 +36,8 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (define HEIGHT (* 3 BASE-RESOLUTION))
 (define PLAYER-HEIGHT 1.75)
 (define SHOOT-HEIGHT (- RESOLUTION 15))
-(provide GRAVITY PROPORTION BASE-RESOLUTION RESOLUTION WIDTH HEIGHT SHOOT-HEIGHT)
+(define PLAYER-SPEED 37)
+(provide GRAVITY PROPORTION BASE-RESOLUTION RESOLUTION WIDTH HEIGHT SHOOT-HEIGHT PLAYER-SPEED)
 
 ;Auxiliar functions to convert between pixels and meters
 (define (pixels->meters pixels)
