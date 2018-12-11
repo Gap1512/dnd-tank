@@ -16,8 +16,8 @@
                   (if (shoot-status shoot)
                       (let ([shoot-frame
                              (if (< 5 (remainder (ws-time ws) 10))
-                                  (shoot-aux-frame-1 (skin-shoot (player-skin player)))
-                                  (shoot-aux-frame-2 (skin-shoot (player-skin player))))])
+                                  (shoot-aux-frame-1 (skin-aux-shoot-aux (select-skin (player-skin player))))
+                                  (shoot-aux-frame-2 (skin-aux-shoot-aux (select-skin (player-skin player)))))])
                         (if (zero? (player-id player))
                             shoot-frame
                             (flip-horizontal shoot-frame)))
@@ -38,8 +38,8 @@
 ;;Player Shoot -> Image
 (define (get-frame player shoot)
   (if (shoot-status shoot)
-      (skin-empty-stancing (player-skin player))
-      (skin-stancing       (player-skin player))))
+      (skin-aux-empty-stancing (select-skin (player-skin player)))
+      (skin-aux-stancing       (select-skin (player-skin player)))))
 
 ;;Test
 #|

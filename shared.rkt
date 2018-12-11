@@ -52,13 +52,13 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (provide BACKGROUND EMPTY-BACKGROUND LOADING-SCREEN)
 
 ;Skin, Shoot, Player and Posn structures
-(struct skin [stancing walking empty-stancing empty-walking shoot] #:transparent)
-(struct shoot-aux [frame-1 frame-2] #:transparent)
-(struct posn [x y] #:transparent)
-(struct player [id skin pos-x])
-(struct shoot [id posn status])
-(struct ws [time players shoots game-running winner-id])
-(provide (struct-out player) (struct-out ws) (struct-out shoot) (struct-out skin) (struct-out shoot-aux) (struct-out posn))
+(struct skin-aux  [stancing walking empty-stancing empty-walking shoot-aux] #:transparent)
+(struct shoot-aux [frame-1 frame-2]                                         #:transparent)
+(struct posn      [x y]                                                     #:prefab)
+(struct player    [id skin pos-x]                                           #:prefab)
+(struct shoot     [id posn status]                                          #:prefab)
+(struct ws        [time players shoots game-running winner-id]              #:prefab)
+(provide (struct-out player) (struct-out ws) (struct-out shoot) (struct-out skin-aux) (struct-out shoot-aux) (struct-out posn))
 
 ;Skins definitions
 (define ARROW    (shoot-aux
@@ -67,37 +67,37 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (define FIREBALL (shoot-aux
                        (scale PROPORTION (bitmap "graphics/Shoots/Fire_01.png"))
                        (scale PROPORTION (bitmap "graphics/Shoots/Fire_02.png"))))
-(define RANGER-1 (skin
+(define RANGER-1 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Ranger/1/Stancing_1.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/1/Walking_1.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/1/Empty_Arrow_Stancing_1.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/1/Empty_Arrow_Walking_1.png"))
                        ARROW))
-(define RANGER-2 (skin
+(define RANGER-2 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Ranger/2/Stancing_2.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/2/Walking_2.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/2/Empty_Arrow_Stancing_2.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/2/Empty_Arrow_Walking_2.png"))
                        ARROW))
-(define RANGER-3 (skin
+(define RANGER-3 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Ranger/3/Stancing_3.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/3/Walking_3.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/3/Empty_Arrow_Stancing_3.png"))
                        (scale PROPORTION (bitmap "graphics/Ranger/3/Empty_Arrow_Walking_3.png"))
                        ARROW))
-(define WIZARD-1 (skin
+(define WIZARD-1 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Wizard/1/Stancing_1.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/1/Walking_1.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/1/Empty_Fireball_Stancing_1.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/1/Empty_Fireball_Walking_1.png"))
                        FIREBALL))
-(define WIZARD-2 (skin
+(define WIZARD-2 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Wizard/2/Stancing_2.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/2/Walking_2.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/2/Empty_Fireball_Stancing_2.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/2/Empty_Fireball_Walking_2.png"))
                        FIREBALL))
-(define WIZARD-3 (skin
+(define WIZARD-3 (skin-aux
                        (scale PROPORTION (bitmap "graphics/Wizard/3/Stancing_3.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/3/Walking_3.png"))
                        (scale PROPORTION (bitmap "graphics/Wizard/3/Empty_Fireball_Stancing_3.png"))
