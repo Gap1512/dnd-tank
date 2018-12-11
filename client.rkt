@@ -1,11 +1,6 @@
 #lang racket
 (require 2htdp/universe 2htdp/image "shared.rkt")
 
-;;Client state is one of:
-;;-string
-;;-integer
-(define client-state-0 "none available")
-
 ;;WorldState -> Image
 ;;Renders The Whole Scene
 (define (render ws)
@@ -41,17 +36,36 @@
       (skin-aux-empty-stancing (select-skin (player-skin player)))
       (skin-aux-stancing       (select-skin (player-skin player)))))
 
+;;WorldState Key -> message
+(define (key-handler ws key)
+   (cond
+        [(key=? key "left") (make-package ws (message "left" 42 42))]
+        [(key=? key "right") (make-package ws (message "right" 42 42))]))
+
+;;WorldState Mouse-Event -> message
+(define (mouse-handler ws x y me)
+  (cond
+    [(string=? me "button-down") (make-package ws (message "mouse" x y))]
+    [else ws]))
+
+;;WorldState -> WorldState
+(define (client-launch ws)
+  (big-bang ws
+    [to-draw render]
+    [on-key key-handler]
+    [on-mouse mouse-handler]))
+
 ;;Test
 #|
 > (animate (λ (time) (render
-   (ws time (list (player 0 (select-skin 5) time) (player 1 (select-skin 1) (- WIDTH time)))
+   (ws time (list (player 0 5 time) (player 1 1 (- WIDTH time)))
           (list (shoot 0 (posn 40 40) #t) (shoot 0 (posn 60 40) #t)) #t 0))))
 
 > (render
    (ws 5
        (list
-        (player 0 (select-skin 5) 85)
-        (player 1 (select-skin 1) 128))
+        (player 0 5 85)
+        (player 1 1 128))
        (list
         (shoot 0 (posn 40 40) #t)
         (shoot 0 (posn 60 40) #f))

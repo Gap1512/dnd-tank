@@ -58,7 +58,8 @@ Shared Attributes: Sprites/Skins, Background, Properties (Gravity, Width, Height
 (struct player    [id skin pos-x]                                           #:prefab)
 (struct shoot     [id posn status]                                          #:prefab)
 (struct ws        [time players shoots game-running winner-id]              #:prefab)
-(provide (struct-out player) (struct-out ws) (struct-out shoot) (struct-out skin-aux) (struct-out shoot-aux) (struct-out posn))
+(struct message   [event x y]                                               #:prefab)
+(provide (struct-out player) (struct-out ws) (struct-out shoot) (struct-out skin-aux) (struct-out shoot-aux) (struct-out posn) (struct-out message))
 
 ;Skins definitions
 (define ARROW    (shoot-aux

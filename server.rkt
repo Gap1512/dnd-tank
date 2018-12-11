@@ -9,23 +9,28 @@
 ;;  shoot-status-player-2(boolean), shoot-pos-player-2(integer), 
 ;;  game-running(boolean), winner-id(integer))
 ;;-#f
-(struct play [players shoots] #:mutable)
 
 ;Initial State
-(define s0 (play RESOLUTION 0
-                  (- WIDTH RESOLUTION) 0
-                  #f (posn RESOLUTION (- HEIGHT SHOOT-HEIGHT))
-                  #f (posn (- WIDTH RESOLUTION) (- HEIGHT SHOOT-HEIGHT))
-                  #t 0))
+(define ws0 (ws 0
+                (list
+                 (player 0 0 64)
+                 (player 1 3 320))
+                (list
+                 (shoot 0 (posn 0 0) #f)
+                 (shoot 0 (posn 0 0) #f))
+                #f
+                -1))
 
 ;Launch
 (define (launch-dnd-tank-server)
-  (universe #f
+  (universe ws0
             (on-new connect)
             (on-msg handle-msg)))
 
 ;Connection
-(define (connect u client)
+(define (connect ws client)
   (if (false? u)
       (make-bundle s0)
       (make-bundle u empty (list client))))
+
+;
