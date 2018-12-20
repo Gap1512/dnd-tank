@@ -41,7 +41,7 @@
    (cond
         [(key=? key "left") (make-package ws (message "left" 42 42))]
         [(key=? key "right") (make-package ws (message "right" 42 42))]
-        [(else ws)]))
+        [else ws]))
 
 ;;WorldState Mouse-Event -> message
 (define (mouse-handler ws x y me)
