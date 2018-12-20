@@ -28,9 +28,5 @@
             (on-msg handle-msg)))
 
 ;Connection
-(define (connect ws client)
-  (if (false? u)
-      (make-bundle s0)
-      (make-bundle u empty (list client))))
-
-;
+(define (connect ws iw)
+  (make-bundle (ws (ws-time ws) (

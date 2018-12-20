@@ -54,7 +54,10 @@
   (big-bang ws
     [to-draw render]
     [on-key key-handler]
-    [on-mouse mouse-handler]))
+    [on-mouse mouse-handler]
+    [on-receive handle-server-messages]
+    [register server]
+    [name label]))
 
 ;;Test
 #|
